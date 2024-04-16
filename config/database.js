@@ -6,7 +6,8 @@ module.exports = async (app) => {
     try {
         mongoose.connect(CONNECTION_STRING, {
             useNewUrlParser: true,
-            useUnifiedTopology: true
+            useUnifiedTopology: true,
+          
         });
         console.log('Database Connected')
     } catch (error) {
