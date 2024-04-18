@@ -3,13 +3,21 @@ const { register, getUsers } = require('../services/userService');
 const { createSession } = require('../utils/jwt')
 
 testController.get('/', (req, res) => {
-    getUsers().then((users) => {
-        res.writeHead(200, {
-            "set-cookie": `token=${createSession(123)}; httpOnly`
+    try {
+        getUsers().then((users) => {
+
+            res.writeHead(200, {
+                "set-cookie": `token=${createSession(123)}; httpOnly`
+            });
+            res.write(JSON.stringify(users));
+            res.end()
         });
-        res.write(JSON.stringify(users));
-        res.end()
-    });
+
+    } catch (error) {
+        res.writeHead(404, 'Not Found');
+        res.write('404 NOT FOUND');
+        res.end
+    }
     // const token = createToken(123);
     // res.writeHead(200, {
     //     "set-cookie": `token=${token}`;
