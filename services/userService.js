@@ -14,6 +14,7 @@ async function register(username, password) {
         throw new Error('Username is taken');
     }
     const hashedPassword = await bcrypt.hash(password, 10);
+
     const user = await User.create({
         username,
         hashedPassword
