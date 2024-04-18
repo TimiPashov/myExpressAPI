@@ -4,7 +4,6 @@ const { register, login } = require('../services/userService');
 
 authController.get('/register', (req, res) => {
     res.writeHead(200, 'OK');
-    res.re
     res.write('<WElcome to register>');
     res.end();
 })
