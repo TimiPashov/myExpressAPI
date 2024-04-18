@@ -21,6 +21,13 @@ authController.post('/register', async (req, res) => {
     }
 });
 
+authController.get('/login', (req, res) => {
+    res.writeHead(200, 'OK');
+    res.write('<WElcome to LOGIN>');
+    res.end();
+})
+
+
 authController.post('/login', async (req, res) => {
     try {
         if (req.body?.username == '' || req.body?.password == '') {
