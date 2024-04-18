@@ -21,7 +21,22 @@ async function register(username, password) {
     return createSession(user);
 }
 
+async function login(username, password) {
+    const user = await User.findOne({ username }).collation({ locale: 'en', strength: 2 });
+    if (!user) {
+        throw new Error('Incorrect username or password');
+    }
+
+    const hasMatch = await bcrypt.compare(password, user.hashedPassword);
+    if (!hasMatch) {
+        throw new Error('Incorrect username or password');
+    }
+    return createSession(user)
+}
+
+
 module.exports = {
     register,
+    login,
     getUsers
 }

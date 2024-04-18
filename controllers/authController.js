@@ -4,12 +4,12 @@ const { register } = require('../services/userService');
 
 authController.get('/register', (req, res) => {
     res.writeHead(200, 'OK');
+    res.re
     res.write('<WElcome to register>');
     res.end();
 })
 
 authController.post('/register', async (req, res) => {
-    console.log('receive req')
     try {
         if (req.body?.username == '' || req.body?.password == '') {
             throw new Error('All fields required!')
