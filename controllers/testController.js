@@ -1,11 +1,11 @@
 const testController = require('express').Router();
 const { register, getUsers } = require('../services/userService');
-const { createToken } = require('../utils/jwt')
+const { createSession } = require('../utils/jwt')
 
 testController.get('/', (req, res) => {
     getUsers().then((users) => {
         res.writeHead(200, {
-            "set-cookie": `token=${createToken(123)}`
+            "set-cookie": `token=${createSession(123)}; httpOnly`
         });
         res.write(JSON.stringify(users));
         res.end()

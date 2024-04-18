@@ -1,13 +1,17 @@
 const jwt = require('jsonwebtoken');
-const secret = 'TimiPashovSecret';
+const JWT_SECRET = 'TimiPashovSecret';
 
-function createToken(data) {
-    return jwt.sign(data, secret);
+function createSession({ _id, username }) {
+    const payload = {
+        _id,
+        username
+    };
+    return jwt.sign(payload, JWT_SECRET);
 }
 
 function verifyToken(token) {
     return new Promise((resolve, reject) => {
-        jwt.verify(token, secret, (err, data) => {
+        jwt.verify(token, JWT_SECRET, (err, data) => {
             if (err) {
                 reject(err);
                 return;
@@ -18,6 +22,6 @@ function verifyToken(token) {
 }
 
 module.exports = {
-    createToken,
+    createSession,
     verifyToken
 }
