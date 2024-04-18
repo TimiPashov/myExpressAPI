@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
+require('dotenv').config();
 
-const CONNECTION_STRING = 'mongodb+srv://pashov91:Tim911003@mynewcluster.0hywvsh.mongodb.net/myOwnDB'
+const CONNECTION_STRING = process.env.MONGODB_STRING;
 
 module.exports = async (app) => {
     try {
