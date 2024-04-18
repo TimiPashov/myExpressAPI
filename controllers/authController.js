@@ -15,7 +15,7 @@ authController.post('/register', async (req, res) => {
         }
         const token = await register(req.body.username, req.body.password);
         res.cookie('token', token, { httpOnly: true });
-        res.redirect('http://127.0.0.1:5500/home.html'); // switch/remove when development continues
+        res.redirect('https://my-express-api-one.vercel.app/'); // switch/remove when development continues
     } catch (error) {
         console.log({ error });
     }
