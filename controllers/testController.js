@@ -2,21 +2,21 @@ const testController = require('express').Router();
 const { register, getUsers } = require('../services/userService');
 const { createSession } = require('../utils/jwt')
 
-testController.get('/', (req, res) => {
+testController.get('/', async (req, res) => {
     try {
-        getUsers().then((users) => {
+        const users = await getUsers();
+        res.json(users)
+        // getUsers().then((users) => {
 
-            res.writeHead(200, {
-                "set-cookie": `token=${createSession(123)}; httpOnly`
-            });
-            res.write(JSON.stringify(users));
-            res.end()
-        });
+        //     res.writeHead(200, {
+        //         "set-cookie": `token=${createSession(123)}; httpOnly`
+        //     });
+        //     res.write(JSON.stringify(users));
+        //     res.end()
+        // });
 
     } catch (error) {
-        res.writeHead(404, 'Not Found');
-        res.write('404 NOT FOUND');
-        res.end
+        res.status(500).json({ message: error.message })
     }
     // const token = createToken(123);
     // res.writeHead(200, {
