@@ -3,9 +3,13 @@ const { register, getUsers } = require('../services/userService');
 const { createSession } = require('../utils/jwt')
 
 testController.get('/', (req, res) => {
-    res.writeHead(200, 'OK');
-    res.write('<WELCOME TO HOME>');
-    res.end();
+    getUsers().then((users) => {
+        res.writeHead(200, {
+            "set-cookie": `token=${createSession(123)}; httpOnly`
+        });
+        res.write(JSON.stringify(users));
+        res.end()
+    });
     // const token = createToken(123);
     // res.writeHead(200, {
     //     "set-cookie": `token=${token}`;
