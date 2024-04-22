@@ -40,10 +40,17 @@ authController.post('/login', async (req, res) => {
             throw new Error('All fields required!')
         }
         const token = await login(req.body.username, req.body.password);
-        res.cookie('token', token, { httpOnly: true });
-        
+        if (token) {
+            res.cookie('token', token, { httpOnly: true });
+            res.status(200).json({ token });
+        }
+
     } catch (error) {
-        console.log({ error });
+        if (error.message === 'Incorrect username or password') {
+            res.status(401).json({ error: error.message });
+        } else {
+            res.status(400).json({ error: error.message }); // Other errors
+        }
     }
 })
 
