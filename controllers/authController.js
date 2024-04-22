@@ -14,10 +14,16 @@ authController.post('/register', async (req, res) => {
             throw new Error('All fields required!')
         }
         const token = await register(req.body.username, req.body.password);
-        res.cookie('token', token, { httpOnly: true });
-        res.redirect('https://my-express-api-one.vercel.app/'); // switch/remove when development continues
+        if (token) {
+            res.cookie('token', token, { httpOnly: true });
+            res.status(200).json({ token });
+        }
     } catch (error) {
-        console.log({ error });
+        if (error.message === 'Username is taken') {
+            res.status(409).json({ error: error.message }); // Username is taken
+        } else {
+            res.status(400).json({ error: error.message }); // Other errors
+        }
     }
 });
 

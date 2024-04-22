@@ -10,16 +10,22 @@ async function getUsers() {
 
 async function register(username, password) {
     const existing = await User.findOne({ username }).collation({ locale: 'en', strength: 2 });
-    if (existing) {
-        throw new Error('Username is taken');
-    }
-    const hashedPassword = await bcrypt.hash(password, 10);
+    try {
 
-    const user = await User.create({
-        username,
-        hashedPassword
-    });
-    return createSession(user);
+        if (existing) {
+            throw new Error('Username is taken');
+        }
+
+        const hashedPassword = await bcrypt.hash(password, 10);
+
+        const user = await User.create({
+            username,
+            hashedPassword
+        });
+        return createSession(user);
+    } catch (error) {
+        throw error
+    }
 }
 
 async function login(username, password) {
