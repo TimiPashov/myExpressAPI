@@ -1,54 +1,64 @@
-const bcrypt = require('bcrypt');
-const User = require('../models/User');
-const { createSession } = require('../utils/jwt');
-
+const bcrypt = require("bcrypt");
+const User = require("../models/User");
+const { createSession } = require("../utils/jwt");
 
 async function getUsers() {
-    const users = await User.find({});
-    return users;
+  const users = await User.find({});
+  return users;
 }
 
-async function register(username, password) {
-    const existing = await User.findOne({ username }).collation({ locale: 'en', strength: 2 });
-    try {
-
-        if (existing) {
-            throw new Error('Username is taken');
-        }
-
-        const hashedPassword = await bcrypt.hash(password, 10);
-
-        const user = await User.create({
-            username,
-            hashedPassword
-        });
-        return createSession(user);
-    } catch (error) {
-        throw error
+async function register(username, email, password) {
+  const existingUser = await User.findOne({ username }).collation({
+    locale: "en",
+    strength: 2,
+  });
+  const existingEmail = await User.findOne({ email }).collation({
+    locale: "en",
+    strength: 2,
+  });
+  try {
+    if (existingUser) {
+      throw new Error("Username is taken");
     }
+    if (existingEmail) {
+      throw new Error("Email is taken");
+    }
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    const user = await User.create({
+      username,
+      email,
+      hashedPassword,
+    });
+    return createSession(user);
+  } catch (error) {
+    throw error;
+  }
 }
 
 async function login(username, password) {
-    const user = await User.findOne({ username }).collation({ locale: 'en', strength: 2 });
-    try {
-
-        if (!user) {
-            throw new Error('Incorrect username or password');
-        }
-
-        const hasMatch = await bcrypt.compare(password, user.hashedPassword);
-        if (!hasMatch) {
-            throw new Error('Incorrect username or password');
-        }
-        return createSession(user);
-    } catch (error) {
-        throw error
+  const user = await User.findOne({ username }).collation({
+    locale: "en",
+    strength: 2,
+  });
+  try {
+    if (!user) {
+      throw new Error("Incorrect username or password");
     }
-}
 
+    const hasMatch = await bcrypt.compare(password, user.hashedPassword);
+    if (!hasMatch) {
+      throw new Error("Incorrect username or password");
+    }
+    return createSession(user);
+  } catch (error) {
+    throw error;
+  }
+}
 
 module.exports = {
-    register,
-    login,
-    getUsers
-}
+  register,
+  login,
+  getUsers,
+};
