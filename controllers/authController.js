@@ -59,4 +59,9 @@ authController.post("/login", async (req, res) => {
   }
 });
 
+authController.get("/logout", async (req, res) => {
+
+  res.clearCookie("token").status(204).json({ message: "Logged Out" });
+});
+
 module.exports = authController;
