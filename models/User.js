@@ -13,7 +13,7 @@ const userSchema = new Schema({
       message: "Invalid Email!",
     },
   },
-  cars: { type: Types.ObjectId, ref: "Car" },
+  cars: [{ type: Types.ObjectId, ref: "Car" }],
   hashedPassword: { type: String, required: true },
 });
 

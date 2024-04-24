@@ -1,7 +1,8 @@
 const Car = require("../models/Car");
+const User = require("../models/User");
+
 const { getAllCars, createCar } = require("../services/carService");
 const { auth } = require("../utils/auth");
-const mongoose = require("mongoose");
 const carController = require("express").Router();
 
 carController.get("/", async (req, res) => {
@@ -25,6 +26,9 @@ carController.post("/", auth(), async (req, res) => {
     );
 
     if (car) {
+      await User.findByIdAndUpdate(req.user._id, {
+        $addToSet: { cars: car._id },
+      });
       res.status(200).json({ car });
     }
   } catch (error) {
