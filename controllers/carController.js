@@ -1,7 +1,7 @@
 const Car = require("../models/Car");
 const User = require("../models/User");
 
-const { getAllCars, createCar } = require("../services/carService");
+const { getAllCars, createCar, getOneCar } = require("../services/carService");
 const { auth } = require("../utils/auth");
 const carController = require("express").Router();
 
@@ -33,6 +33,14 @@ carController.post("/", auth(), async (req, res) => {
     }
   } catch (error) {
     res.status(401).json({ message: error.message });
+  }
+});
+
+carController.get("/:carId", async (req, res) => {
+  const car = await getOneCar(req.params.carId);
+
+  if (car) {
+    res.status(200).json({ car });
   }
 });
 

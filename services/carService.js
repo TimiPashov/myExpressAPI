@@ -32,7 +32,19 @@ async function createCar(
   return car;
 }
 
+async function getOneCar(id) {
+  const car = await Car.findById(id).exec();
+  return car;
+}
+
+async function deleteCar(id) {
+  const car = await Car.findByIdAndDelete(id);
+  return car;
+}
+
 module.exports = {
   getAllCars,
   createCar,
+  deleteCar,
+  getOneCar,
 };
