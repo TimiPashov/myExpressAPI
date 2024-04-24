@@ -1,5 +1,6 @@
 const authController = require("express").Router();
 const { register, login } = require("../services/userService");
+const { auth } = require("../utils/auth");
 
 authController.get("/register", (req, res) => {
   res.writeHead(200, "OK");
@@ -42,6 +43,8 @@ authController.get("/login", (req, res) => {
 
 authController.post("/login", async (req, res) => {
   try {
+    
+
     if (req.body?.username == "" || req.body?.password == "") {
       throw new Error("All fields required!");
     }
@@ -60,7 +63,6 @@ authController.post("/login", async (req, res) => {
 });
 
 authController.get("/logout", async (req, res) => {
-
   res.clearCookie("token").status(204).json({ message: "Logged Out" });
 });
 
