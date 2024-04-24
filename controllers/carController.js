@@ -10,8 +10,12 @@ const { auth } = require("../utils/auth");
 const carController = require("express").Router();
 
 carController.get("/", async (req, res) => {
-  const cars = await getAllCars();
-  res.json(cars);
+  try {
+    const cars = await getAllCars();
+    res.json(cars);
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
 });
 
 carController.post("/", auth(), async (req, res) => {
@@ -53,11 +57,11 @@ carController.delete("/:carId", auth(), async (req, res) => {
     const carId = req.params.carId;
     const user = await User.findById(req.user._id);
     const isOwner = user.cars.includes(carId);
-    if (!isOwner){
-        throw new Error('Must be owner!')
+    if (!isOwner) {
+      throw new Error("Must be owner!");
     }
     const car = await deleteCar(carId);
-    res.status(200).json({message: 'Car Deleted!'})
+    res.status(200).json({ message: "Car Deleted!" });
   } catch (error) {
     res.status(401).json({ error: error.message });
   }
