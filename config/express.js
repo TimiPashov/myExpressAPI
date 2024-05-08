@@ -9,7 +9,7 @@ module.exports = (app) => {
   app.use(bodyParser.json());
   app.use(
     cors({
-      origin: "http://localhost:4200",
+      origin: ["http://localhost:4200", 'http://localhost:5173'],
       credentials: true,
     })
   );
