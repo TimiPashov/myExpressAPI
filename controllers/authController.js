@@ -2,6 +2,10 @@ const authController = require("express").Router();
 const { register, login } = require("../services/userService");
 const { auth } = require("../utils/auth");
 
+authController.get("/profile", auth(), (req, res) => {
+  res.status(200).json({ user: req.user });
+});
+
 authController.get("/register", (req, res) => {
   res.writeHead(200, "OK");
   res.write("<WElcome to register>");
@@ -30,7 +34,7 @@ authController.post("/register", async (req, res) => {
     if (error.message === "Username is taken") {
       res.status(409).json({ error: error.message }); // Username is taken
     } else {
-      res.status(400).json({ error: error.message }); // Other errors
+      res.status(400).json({ error: error.message });
     }
   }
 });
@@ -43,8 +47,6 @@ authController.get("/login", (req, res) => {
 
 authController.post("/login", async (req, res) => {
   try {
-    
-
     if (req.body?.username == "" || req.body?.password == "") {
       throw new Error("All fields required!");
     }
@@ -57,7 +59,7 @@ authController.post("/login", async (req, res) => {
     if (error.message === "Incorrect username or password") {
       res.status(401).json({ error: error.message });
     } else {
-      res.status(400).json({ error: error.message }); // Other errors
+      res.status(400).json({ error: error.message });
     }
   }
 });
