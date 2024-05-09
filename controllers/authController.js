@@ -3,7 +3,8 @@ const { register, login } = require("../services/userService");
 const { auth } = require("../utils/auth");
 
 authController.get("/profile", auth(), (req, res) => {
-  res.status(200).json({ user: req.user });
+  const { cars, email, username, _id } = req.user;
+  res.status(200).json({ cars, email, username, _id });
 });
 
 authController.get("/register", (req, res) => {
@@ -20,6 +21,9 @@ authController.post("/register", async (req, res) => {
       req.body?.email == ""
     ) {
       throw new Error("All fields required!");
+    }
+    if (req.body?.rePassword !== req.body?.password) {
+      throw new Error("Passwords must match!");
     }
     const token = await register(
       req.body.username,
@@ -64,7 +68,7 @@ authController.post("/login", async (req, res) => {
   }
 });
 
-authController.get("/logout", async (req, res) => {
+authController.get("/logout", auth(), async (req, res) => {
   res.clearCookie("token").status(204).json({ message: "Logged Out" });
 });
 
