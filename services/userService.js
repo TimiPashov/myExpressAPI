@@ -33,7 +33,7 @@ async function register(username, email, password) {
     });
     return createSession(user);
   } catch (error) {
-    throw error;
+    throw new Error(error.message);
   }
 }
 
@@ -53,7 +53,7 @@ async function login(username, password) {
     }
     return createSession(user);
   } catch (error) {
-    throw error;
+    throw new Error(error.message);
   }
 }
 

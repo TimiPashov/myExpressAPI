@@ -30,12 +30,13 @@ authController.post("/register", async (req, res) => {
       req.body.email,
       req.body.password
     );
+    
     if (token) {
       res.cookie("token", token, { httpOnly: true });
       res.status(200).json({ token });
     }
   } catch (error) {
-    if (error.message === "Username is taken") {
+    if (error.message === "Username is taken" || error.message === "Email is taken") {
       res.status(409).json({ error: error.message }); // Username is taken
     } else {
       res.status(400).json({ error: error.message });
@@ -55,6 +56,7 @@ authController.post("/login", async (req, res) => {
       throw new Error("All fields required!");
     }
     const token = await login(req.body.username, req.body.password);
+
     if (token) {
       res.cookie("token", token, { httpOnly: true });
       res.status(200).json({ token });

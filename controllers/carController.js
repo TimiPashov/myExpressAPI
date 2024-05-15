@@ -37,7 +37,7 @@ carController.post("/", auth(), async (req, res) => {
       await User.findByIdAndUpdate(req.user._id, {
         $addToSet: { cars: car._id },
       });
-      res.status(200).json({ car });
+      res.status(200).json(car);
     }
   } catch (error) {
     res.status(401).json({ message: error.message });
